@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>monster_challenge</title>
+    <script src="./node_modules/vue/dist/vue.js"></script>
+    <script>
+      window.onload = function start() {
+        
+        new Vue({
+            el: "#app",
+            data: {
+              title: "Hooman VS Monster" ,
+              name: {
+                hero: "",
+                monster: "Monster",
+              },
+              barLength: {
+                monsterBar: 100,
+                heroBar: 100,
+              }
+
+            },
+            methods: {
+              giveUp: function() {
+                let health = document.getElementById("monsterBar");
+                let health2 = document.getElementById("heroBar") 
+                let nameInput =document.getElementById("nameInput")
+                alert("You Flee !!!");
+                health.value = 100;
+                health2.value = 100;
+                nameInput.value = "";
+            },
+
+            onUpdateName: function(e) {
+                this.name.hero = e.target.value;
+           },
+
+            damageCalc: function(min, max) {
+              let health = document.getElementById("monsterBar");
+              health.value -= this.getDamage(9, 20);
+              let health2 =  document.getElementById("heroBar");
+              health2.value -= this.getDamage(9, 20);
+              if (health.value <= 0) {
+                alert("you win !!!");
+                health.value = 100;
+                health2.value = 100;
+                nameInput.value = "";
+              } else if (health2.value <= 0) {
+                  alert('you loose !!!');
+                  health.value = 100;
+                  health2.value = 100;
+                  nameInput.value = "";
+                }
+              },
+
+            getDamage: function(min, max) {
+                return Math.max(Math.floor(Math.random() * max) + 1, min);
+            },
+
+            heal: function() {
+              let health2 = document.getElementById("heroBar")
+              health2.value = (health2.value + 25 <= 100) ?
+              health2.value + 25 : 100;
+              health2.value -= this.getDamage(5, 15);
+            },
+
+            superDamage: function() {
+              let health = document.getElementById("monsterBar");
+              health.value -= this.getDamage(9, 20) + 5;
+              let health2 = document.getElementById("heroBar");
+              health2.value -= this.getDamage(9, 20) + 5;
+              if (health.value <= 0) {
+                alert("you win !!!");
+                health.value = 100;
+                health2.value = 100;
+                nameInput.value = "";
+              } else if (health2.value <= 0) {
+                  alert('you loose !!!');
+                  health.value = 100;
+                  health2.value = 100;
+                  nameInput.value = "";
+              }
+            }
+          }
+        })
+    };
+    </script>
+    <style>
+      *{
+        padding: 10px;
+      }
+      body {
+        text-align: center;
+        display: block;
+      }
+
+      div {
+        border: 0.00002em solid darkslategray;
+      }
+
+      .at {
+        background-color: red;
+      }
+      .spe {
+        background-color: yellow;
+      }
+      .heal {
+        background-color: green;
+      }
+      .give {
+        background-color: blue;
+      }
+      #monsterLife {
+        width: 100%;
+        background-color: grey;
+      }
+      #monsterBar {
+        width: 100%;
+        height: 30px;
+        background-color: green;
+      }
+      #heroLife {
+        width: 100%;
+        background-color: grey;
+      }
+      #heroBar {
+        width: 100%;
+        height: 30px;
+        background-color: green;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1>{{ title }}</h1>
+      <h2 id="heroName">{{ name.hero }}</h2>
+      <div id="heroLife">
+        <progress id="heroBar" value="100" min="0" max="100"></progress>
+      </div>
+      <h2>{{ name.monster }}</h2>
+      <div id="monsterLife">
+        <progress id="monsterBar" value="100" min="0" max="100"></progress>
+      </div>
+      <button id="start">Start</button>
+      <div id="buttons">
+        <button id="at" class="at" type="button" @click="damageCalc">Attack</button>
+        <button id="spe" class="spe" type="button" @click="superDamage">Special Attack</button>
+        <button id="heal" class="heal" type="button" @click="heal">Heal</button>
+        <button id="give" class="give" type="button" @click="giveUp">Give Up</button>
+      </div>
+      <h3>Player Name</h3>
+      <input id="nameInput" type="text" placeholder="Hooman What Is Your Name" v-on:input="onUpdateName($event)">
+      <div id="log">
+          <ul>
+            <li v-for="n in 10">
+              <span>
+
+              </span>
+            </li>
+          </ul>
+      </div>
+    </div>
+  </body>
+</html>
